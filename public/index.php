@@ -24,8 +24,14 @@
 <body>
   <div class="container mx-auto">
     <form @submit.prevent="upload" x-data="{
+        file:null,
+        error:'',
         upload(){
-          console.log('upload file');
+          this.file = this.$refs.file?.files[0];
+          if(!this.file){
+            this.error='🔴Escolha um arquivo';
+          }
+          console.log(this.file);
         }
       }">
       <div class="space-y-12">
@@ -35,6 +41,9 @@
           <div class="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div class="col-span-full">
               <label for="cover-photo" class="block text-sm/6 font-medium text-gray-900">Cover photo</label>
+              <template x-if="error">
+                <div class="text-red-600 italic text-xs" x-text="error"></div>
+              </template>
               <div class="mt-2 flex justify-center rounded-lg border border-dashed border-gray-900/25 px-6 py-10">
                 <div class="text-center">
                   <svg class="mx-auto size-12 text-gray-300" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" data-slot="icon">
@@ -43,7 +52,7 @@
                   <div class="mt-4 flex text-sm/6 text-gray-600">
                     <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-semibold text-indigo-600 focus-within:ring-2 focus-within:ring-indigo-600 focus-within:ring-offset-2 focus-within:outline-hidden hover:text-indigo-500">
                       <span>Upload a file</span>
-                      <input id="file-upload" name="file-upload" type="file" class="sr-only" />
+                      <input id="file-upload" x-ref="file" name="file-upload" type="file" class="sr-only" />
                     </label>
                     <p class="pl-1">or drag and drop</p>
                   </div>
